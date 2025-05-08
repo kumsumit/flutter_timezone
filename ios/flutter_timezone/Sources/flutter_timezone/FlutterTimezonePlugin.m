@@ -1,4 +1,4 @@
-#import "FlutterTimezonePlugin.h"
+#import "./include/flutter_timezone/FlutterTimezonePlugin.h"
 
 @implementation FlutterTimezonePlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {

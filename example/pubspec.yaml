@@ -1,20 +1,22 @@
 name: flutter_timezone_example
-description: A new example flutter project.
+description: "Demonstrates how to use the flutter_timezone plugin."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
-
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=3.7.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+
   flutter_timezone:
-    path: ..
+    path: ../
 
 dev_dependencies:
+  flutter_lints: ^5.0.0
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
 flutter:

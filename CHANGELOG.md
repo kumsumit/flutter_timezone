@@ -1,7 +1,49 @@
+## 4.1.0
+
+* flutter_timezone now supports Swift Package Manager ([40](https://github.com/tjarvstrand/flutter_timezone/pull/44)) @MaikuB
+
+## 4.0.0
+
+* flutter_timezone now supports Linux ([40](https://github.com/tjarvstrand/flutter_timezone/pull/40)) @dg76
+* **Breaking change:** On Android, this plugin now requires Java 17 ([#42](https://github.com/tjarvstrand/flutter_timezone/pull/42)) @kuhnroyal
+
+## 3.0.1
+
+* Remove leftover reference to v1 Android embedding API ([#35](https://github.com/tjarvstrand/flutter_timezone/issues/35))
+
+## 3.0.0
+
+* **Breaking change:** Remove support for the old version 1 of the Android embedding API which will no longer be
+supported in Flutter > 3.24.x ([#35](https://github.com/tjarvstrand/flutter_timezone/issues/35))
+* Fetch a list of all available time zones on web in browsers that support it. ([#34](https://github.com/tjarvstrand/flutter_timezone/pull/34)) @HosamHasanRamadan
+* Fix support for Windows < 11. ([#36](https://github.com/tjarvstrand/flutter_timezone/pull/36)) @domyd
+
+## 2.1.0
+
+Add support for Windows.
+
+## 2.0.1
+
+Remove unused dependencies.
+
+## 2.0.0
+
+Support for Wasm compilation.
+
+This updates the code to use the new web and js_interop libraries, which means that Flutter 3.22.0
+or later is required.
+
+## 1.0.8
+
+Android:
+ - Bump Kotlin version to 1.6.21. Fixes [#15](https://github.com/tjarvstrand/flutter_timezone/issues/15).
+
+Note: This version may require running a Gradle clean BEFORE you upgrade.
+
 ## 1.0.7
 
 Android:
-- Set JVM target to Java 8 for Kotlin language. Fix issue [#10](https://github.com/tjarvstrand/flutter_timezone/issues/10).
+- Set JVM target to Java 8 for Kotlin language. Fixes [#10](https://github.com/tjarvstrand/flutter_timezone/issues/10).
 
 ## 1.0.6
 

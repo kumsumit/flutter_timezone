@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js.dart';
 
 ///
 /// The plugin class for the web, acts as the plugin inside bits
@@ -10,12 +10,8 @@ import 'package:js/js.dart';
 ///
 class FlutterTimezonePlugin {
   static void registerWith(Registrar registrar) {
-    final MethodChannel channel = MethodChannel(
-      'flutter_timezone',
-      const StandardMethodCodec(),
-      registrar,
-    );
-    final FlutterTimezonePlugin instance = FlutterTimezonePlugin();
+    final channel = MethodChannel('flutter_timezone', const StandardMethodCodec(), registrar);
+    final instance = FlutterTimezonePlugin();
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
 
@@ -24,13 +20,11 @@ class FlutterTimezonePlugin {
       case 'getLocalTimezone':
         return _getLocalTimeZone();
       case 'getAvailableTimezones':
-        return [_getLocalTimeZone()];
+        return _getAvailableTimezones();
       default:
         throw PlatformException(
             code: 'Unimplemented',
-            details:
-                "The flutter_native_timezone plugin for web doesn't implement "
-                "the method '${call.method}'");
+            details: "The flutter_native_timezone plugin for web doesn't implement the method '${call.method}'");
     }
   }
 
@@ -40,19 +34,33 @@ class FlutterTimezonePlugin {
   String _getLocalTimeZone() {
     return jsDateTimeFormat().resolvedOptions().timeZone;
   }
+
+  List<String> _getAvailableTimezones() {
+    final function = supportedValuesOf as List<String> Function(String value)?;
+    return function?.call('timeZone') ?? [_getLocalTimeZone()];
+  }
 }
+
+@JS('Intl.supportedValuesOf')
+external JSFunction? supportedValuesOf;
 
 @JS('Intl.DateTimeFormat')
 external _JSDateTimeFormat jsDateTimeFormat();
 
-@JS()
-abstract class _JSDateTimeFormat {
+@JS('Intl.DateTimeFormat.prototype')
+@staticInterop
+abstract class _JSDateTimeFormat {}
+
+extension on _JSDateTimeFormat {
   @JS()
   external _JSResolvedOptions resolvedOptions();
 }
 
 @JS()
-abstract class _JSResolvedOptions {
+@staticInterop
+abstract class _JSResolvedOptions {}
+
+extension on _JSResolvedOptions {
   @JS()
   external String get timeZone;
 }
