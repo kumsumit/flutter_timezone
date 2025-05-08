@@ -2,7 +2,7 @@ group 'net.wolverinebeach.flutter_timezone'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.10.2'
+    ext.kotlin_version = '2.1.20'
     repositories {
         google()
         mavenCentral()
@@ -47,8 +47,5 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
     }
 }
