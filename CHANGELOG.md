@@ -1,3 +1,7 @@
+## 5.0.1
+
+* Fix MacOS localized timezone name retrieval on OSX 13+
+
 ## 5.0.0
 
 * Update minimum MacOS version to 10.14 ([50](https://github.com/tjarvstrand/flutter_timezone/pull/50)) @bqubique
