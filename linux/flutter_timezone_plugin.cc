@@ -35,11 +35,15 @@ FlMethodResponse* get_local_timezone() {
     if (timezone.empty()) {
         timezone = read_timezone_from_file();
     }
-    if (timezone.empty() || true) {
+    if (timezone.empty()) {
         timezone = "UTC";
     }
 
-    g_autoptr(FlValue) result = fl_value_new_string(timezone.c_str());
+    g_autoptr(FlValue) result = fl_value_new_map();
+    fl_value_set_string_take(result, "identifier",
+                             fl_value_new_string(timezone.c_str()));
+    fl_value_set_string_take(result, "localizedName", fl_value_new_null());
+    fl_value_set_string_take(result, "locale", fl_value_new_null());
     return FL_METHOD_RESPONSE(fl_method_success_response_new(result));
 }
 
@@ -75,7 +79,7 @@ FlMethodResponse* get_available_timezones() {
 
     if (file.is_open()) {
         while (std::getline(file, line)) {
-            if (line[0] != '#') {
+            if (!line.empty() && line[0] != '#') {
                 size_t pos = line.find('\t', 0);
                 if (pos != std::string::npos) {
                     pos = line.find('\t', pos + 1);
@@ -93,7 +97,13 @@ FlMethodResponse* get_available_timezones() {
 
     g_autoptr(FlValue) result = fl_value_new_list();
     for (const auto& tz : timezones) {
-        fl_value_append_take(result, fl_value_new_string(tz.c_str()));
+        g_autoptr(FlValue) timezone_info = fl_value_new_map();
+        fl_value_set_string_take(timezone_info, "identifier",
+                                 fl_value_new_string(tz.c_str()));
+        fl_value_set_string_take(timezone_info, "localizedName",
+                                 fl_value_new_null());
+        fl_value_set_string_take(timezone_info, "locale", fl_value_new_null());
+        fl_value_append_take(result, fl_value_ref(timezone_info));
     }
 
     return FL_METHOD_RESPONSE(fl_method_success_response_new(result));

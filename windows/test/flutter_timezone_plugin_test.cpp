@@ -15,14 +15,25 @@ namespace flutter_timezone {
 
         namespace {
             using flutter::EncodableValue;
+            using flutter::EncodableMap;
             using flutter::MethodCall;
             using flutter::MethodResultFunctions;
 
         }  // namespace
 
-        static bool isNonEmptyString(const EncodableValue& value) {
-            if (std::holds_alternative<std::string>(value)) {
-                return !std::get<std::string>(value).empty();
+        static bool isTimezoneInfoMap(const EncodableValue& value) {
+            if (std::holds_alternative<EncodableMap>(value)) {
+                const auto& map = std::get<EncodableMap>(value);
+                const auto identifier = map.find(EncodableValue("identifier"));
+                if (identifier == map.end()) {
+                    return false;
+                }
+
+                if (!std::holds_alternative<std::string>(identifier->second)) {
+                    return false;
+                }
+
+                return !std::get<std::string>(identifier->second).empty();
             }
             return false;
         }
@@ -45,26 +56,25 @@ namespace flutter_timezone {
             // Since the exact count and values vary by host, just ensure that it's a list of non-empty strings
             EXPECT_GE(resultVector.size(), 1);
             for (const auto& value : resultVector) {
-                EXPECT_TRUE(isNonEmptyString(value));
+                EXPECT_TRUE(isTimezoneInfoMap(value));
             }
         }
 
         TEST(FlutterTimezonePlugin, GetLocalTimezone) {
             FlutterTimezonePlugin plugin;
             // Save the reply value from the success callback.
-            std::string resultString;
+            EncodableValue resultValue;
 
             // Call the method and store the result in the resultString.
             plugin.HandleMethodCall(
                 MethodCall(kGetLocalTimezone, std::make_unique<EncodableValue>()),
                 std::make_unique<MethodResultFunctions<>>(
-                    [&resultString](const EncodableValue* result) {
-                        resultString = std::get<std::string>(*result);
+                    [&resultValue](const EncodableValue* result) {
+                        resultValue = *result;
                     },
                     nullptr, nullptr));
 
-            // Since the string varies by host, just ensure that it's a non-empty string
-            EXPECT_GE(resultString.length(), 1);
+            EXPECT_TRUE(isTimezoneInfoMap(resultValue));
         }
     }  // namespace test
 }  // namespace flutter_timezone

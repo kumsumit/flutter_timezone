@@ -3,10 +3,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_timezone'
-  s.version          = '0.0.1'
-  s.summary          = 'A native timezone project.'
+  s.version          = '5.0.1'
+  s.summary          = 'A Flutter plugin for getting the local timezone.'
   s.description      = <<-DESC
-Get the native timezone from ios.
+Get the local timezone and available timezone identifiers from iOS.
                        DESC
   s.homepage         = 'https://github.com/tjarvstrand/flutter_timezone'
   s.license          = { :file => '../LICENSE' }
@@ -18,4 +18,3 @@ Get the native timezone from ios.
   s.dependency 'Flutter'
   s.ios.deployment_target = '11.0'
 end
-

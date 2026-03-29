@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -18,13 +19,13 @@ class FlutterTimezonePlugin {
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'getLocalTimezone':
-        return _getLocalTimeZone();
+        return _getLocalTimeZoneInfo();
       case 'getAvailableTimezones':
-        return _getAvailableTimezones();
+        return _getAvailableTimezoneInfos();
       default:
         throw PlatformException(
             code: 'Unimplemented',
-            details: "The flutter_native_timezone plugin for web doesn't implement the method '${call.method}'");
+            details: "The flutter_timezone plugin for web doesn't implement the method '${call.method}'");
     }
   }
 
@@ -32,20 +33,45 @@ class FlutterTimezonePlugin {
   /// local time zone when running on the web.
   ///
   String _getLocalTimeZone() {
-    return jsDateTimeFormat().resolvedOptions().timeZone;
+    return _jsDateTimeFormat().resolvedOptions().timeZone;
   }
 
-  List<String> _getAvailableTimezones() {
-    final function = supportedValuesOf as List<String> Function(String value)?;
-    return function?.call('timeZone') ?? [_getLocalTimeZone()];
+  Map<String, Object?> _getLocalTimeZoneInfo() {
+    return <String, Object?>{
+      'identifier': _getLocalTimeZone(),
+      'localizedName': null,
+      'locale': null,
+    };
+  }
+
+  List<Map<String, Object?>> _getAvailableTimezoneInfos() {
+    final intl = globalContext.getProperty<JSObject?>('Intl'.toJS);
+    if (intl == null || !intl.hasProperty('supportedValuesOf'.toJS).toDart) {
+      return <Map<String, Object?>>[_getLocalTimeZoneInfo()];
+    }
+
+    final timezones = _supportedValuesOf('timeZone'.toJS);
+    if (timezones == null) {
+      return <Map<String, Object?>>[_getLocalTimeZoneInfo()];
+    }
+
+    return timezones.toDart
+        .map(
+          (timezone) => <String, Object?>{
+            'identifier': timezone.toDart,
+            'localizedName': null,
+            'locale': null,
+          },
+        )
+        .toList();
   }
 }
 
 @JS('Intl.supportedValuesOf')
-external JSFunction? supportedValuesOf;
+external JSArray<JSString>? _supportedValuesOf(JSString value);
 
 @JS('Intl.DateTimeFormat')
-external _JSDateTimeFormat jsDateTimeFormat();
+external _JSDateTimeFormat _jsDateTimeFormat();
 
 @JS('Intl.DateTimeFormat.prototype')
 @staticInterop

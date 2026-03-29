@@ -17,6 +17,19 @@
 
 namespace flutter_timezone {
 
+    namespace {
+        flutter::EncodableMap BuildTimezoneInfo(const std::string& identifier) {
+            flutter::EncodableMap timezone_info;
+            timezone_info[flutter::EncodableValue("identifier")] =
+                flutter::EncodableValue(identifier);
+            timezone_info[flutter::EncodableValue("localizedName")] =
+                flutter::EncodableValue();
+            timezone_info[flutter::EncodableValue("locale")] =
+                flutter::EncodableValue();
+            return timezone_info;
+        }
+    }  // namespace
+
     // static
     void FlutterTimezonePlugin::RegisterWithRegistrar(
         flutter::PluginRegistrarWindows* registrar) {
@@ -94,12 +107,15 @@ namespace flutter_timezone {
 
         if (length == 0) {
             // No mapping found between Windows and IANA time zone ids
-            result->Success(flutter::EncodableValue(std::string(UCAL_UNKNOWN_ZONE_ID)));
+            result->Success(flutter::EncodableValue(
+                BuildTimezoneInfo(std::string(UCAL_UNKNOWN_ZONE_ID))));
+            return;
         }
 
         std::wstring tz(buffer);
 #pragma warning(suppress : 4244)
-        result->Success(flutter::EncodableValue(std::string(tz.begin(), tz.end())));
+        result->Success(flutter::EncodableValue(
+            BuildTimezoneInfo(std::string(tz.begin(), tz.end()))));
     }
 
     /// <summary>
@@ -119,6 +135,7 @@ namespace flutter_timezone {
 
         if (U_FAILURE(status)) {
             result->Error(std::string(u_errorName(status)), "Could not fetch available timezones.");
+            return;
         }
 
         auto count = uenum_count(tzEnumeration, &status);
@@ -134,7 +151,8 @@ namespace flutter_timezone {
                 continue;
             }
 
-            timezones.push_back(flutter::EncodableValue(std::string(buffer)));
+            timezones.push_back(
+                flutter::EncodableValue(BuildTimezoneInfo(std::string(buffer))));
         }
 
         // close the enumeration
