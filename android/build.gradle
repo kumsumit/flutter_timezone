@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'net.wolverinebeach.flutter_timezone'
-    compileSdk 36
+    compileSdk 37
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -41,7 +41,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        targetSdk 36
+        targetSdk 37
         minSdkVersion 21
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
