@@ -13,6 +13,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String? _countryForCurrentTz;
+  List<String> _timezonesForCountry = [];
+  List<String> _countriesForOffset = [];
+  final String _exampleCountry = 'IN';
+  final String _exampleOffset = '5.5';
   TimezoneInfo? _timezone;
   List<TimezoneInfo> _availableTimezones = [];
 
@@ -26,6 +31,18 @@ class _MyAppState extends State<MyApp> {
     _timezone = await FlutterTimezone.getLocalTimezone();
     _availableTimezones = await FlutterTimezone.getAvailableTimezones();
     _availableTimezones.sort((a, b) => a.identifier.compareTo(b.identifier));
+
+    // Example: get country for current timezone
+    _countryForCurrentTz = _timezone != null
+        ? getCountryCodeForTimezone(_timezone!.identifier)
+        : null;
+
+    // Example: get all timezones for a country (e.g., 'IN')
+    _timezonesForCountry = getTimezonesForCountry(_exampleCountry);
+
+    // Example: get all countries for a GMT offset (e.g., '5.5')
+    _countriesForOffset = getCountriesForOffset(_exampleOffset);
+
     if (mounted) {
       setState(() {});
     }
@@ -41,8 +58,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: <Widget>[
               Text(
                 'Local Time Zone',
@@ -52,20 +68,32 @@ class _MyAppState extends State<MyApp> {
                 '${_timezone?.identifier ?? 'Unknown'} - ${_timezone?.localizedName?.name ?? 'Unknown'}',
                 key: const ValueKey('timeZoneLabel'),
               ),
-              const SizedBox(height: 12),
+              Text(
+                'Country for local timezone: ${_countryForCurrentTz ?? "..."}',
+              ),
+              const SizedBox(height: 16),
+              Text('All timezones for country ($_exampleCountry):'),
+              ..._timezonesForCountry.map((tz) => Text(tz)).toList(),
+              const SizedBox(height: 16),
+              Text('Countries for GMT offset ($_exampleOffset):'),
+              ..._countriesForOffset.map((cc) => Text(cc)).toList(),
+              const SizedBox(height: 16),
               Text(
                 'Available Time Zones (${_availableTimezones.length})',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              Expanded(
+              SizedBox(
+                height: 200,
                 child: ListView.builder(
                   itemCount: _availableTimezones.length,
                   itemBuilder: (_, index) {
                     final info = _availableTimezones[index];
-                    return Text('${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}');
+                    return Text(
+                      '${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}',
+                    );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

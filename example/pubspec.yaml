@@ -23,3 +23,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Enable desktop platforms
+  plugin:
+    platforms:
+      linux:
+        pluginClass: FlutterTimezonePlugin
+        fileName: flutter_timezone_plugin.cc
+      windows:
+        pluginClass: FlutterTimezonePlugin
+        fileName: flutter_timezone_plugin.cpp
