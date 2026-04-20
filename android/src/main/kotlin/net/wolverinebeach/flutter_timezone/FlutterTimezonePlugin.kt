@@ -24,22 +24,6 @@ class FlutterTimezonePlugin : FlutterPlugin, MethodCallHandler {
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
-    private fun parseLocale(localeIdentifier: String?): Locale? {
-        return if (localeIdentifier != null) {
-            try {
-                val parts = localeIdentifier.split("_", "-")
-                when (parts.size) {
-                    1 -> Locale(parts[0])
-                    2 -> Locale(parts[0], parts[1])
-                    else -> null
-                }
-            } catch (e: Exception) {
-                null
-            }
-        } else {
-            Locale.getDefault()
-        }
-    }
 
     private fun parseLocale(localeIdentifier: String?): Locale? {
         return if (localeIdentifier != null) {
@@ -62,7 +46,6 @@ class FlutterTimezonePlugin : FlutterPlugin, MethodCallHandler {
         when (call.method) {
             "getLocalTimezone" -> {
                 val locale = parseLocale(call.arguments as? String)
-
                 val timezoneId = getLocalTimezone()
                 val timeZone = TimeZone.getTimeZone(timezoneId)
                 val localizedName = locale?.let { timeZone.getDisplayName(it) }
@@ -99,32 +82,11 @@ class FlutterTimezonePlugin : FlutterPlugin, MethodCallHandler {
         } else {
             TimeZone.getAvailableIDs().toList()
         }
-        
-        for (timezoneId in timezoneIds) {
-            val timeZone = TimeZone.getTimeZone(timezoneId)
-            val localizedName = locale?.let { timeZone.getDisplayName(it) }
-            
-            availableTimezones.add(mapOf(
-                "identifier" to timezoneId,
-                "localizedName" to localizedName,
-                "locale" to locale?.toString()
-            ))
-        }
-        return availableTimezones
-    }
 
-    private fun getAvailableTimezonesWithLocalization(locale: Locale?): List<Map<String, Any?>> {
-        val availableTimezones = ArrayList<Map<String, Any?>>()
-        val timezoneIds = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ZoneId.getAvailableZoneIds()
-        } else {
-            TimeZone.getAvailableIDs().toList()
-        }
-        
         for (timezoneId in timezoneIds) {
             val timeZone = TimeZone.getTimeZone(timezoneId)
             val localizedName = locale?.let { timeZone.getDisplayName(it) }
-            
+
             availableTimezones.add(mapOf(
                 "identifier" to timezoneId,
                 "localizedName" to localizedName,
