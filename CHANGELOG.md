@@ -1,3 +1,6 @@
+## 5.0.2
+
+* Fix [57](https://github.com/tjarvstrand/flutter_timezone/issues/57) JS interop types ([58](https://github.com/tjarvstrand/flutter_timezone/pull/59) @bsutton and [59](https://github.com/tjarvstrand/flutter_timezone/pull/59 @lacostej)).
 
 ## 5.0.1
 

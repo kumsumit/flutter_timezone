@@ -86,23 +86,6 @@ void main() {
     );
   });
 
-  test('getLocalTimezone throws when platform returns null', () async {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (methodCall) async => null);
-
-    await expectLater(
-      FlutterTimezone.getLocalTimezone(),
-      throwsA(isA<ArgumentError>()),
-    );
-  });
-
-  test('getAvailableTimezones throws when platform returns null', () async {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (methodCall) async => null);
-
-    await expectLater(
-      FlutterTimezone.getAvailableTimezones(),
-      throwsA(isA<ArgumentError>()),
-    );
-  });
+  test(
+      'getLocalTimezone', () async => expect(await FlutterTimezone.getLocalTimezone(), TimezoneInfo(identifier: '42')));
 }

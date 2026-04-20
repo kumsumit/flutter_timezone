@@ -5,20 +5,11 @@ import 'package:meta/meta.dart';
 class TimezoneInfo with EquatableMixin {
   TimezoneInfo({required this.identifier, this.localizedName});
 
-  factory TimezoneInfo.fromJson(Map<Object?, Object?> json) {
-    final identifier = json['identifier'];
+  factory TimezoneInfo.fromJson(Map json) {
     final localizedName = json['localizedName'];
-    final locale = json['locale'];
-    if (identifier is! String) {
-      throw ArgumentError('Invalid timezone payload: missing identifier');
-    }
-
     return TimezoneInfo(
-      identifier: identifier,
-      localizedName: localizedName is String && locale is String
-          ? (name: localizedName, locale: locale)
-          : null,
-    );
+        identifier: json['identifier'] as String,
+        localizedName: localizedName == null ? null : (name: localizedName, locale: json['locale']));
   }
 
   /// The standardized IANA identifier for this timezone, e.g. "America/Los_Angeles", as reported by the underlying

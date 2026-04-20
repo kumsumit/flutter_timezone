@@ -62,9 +62,7 @@ class _MyAppState extends State<MyApp> {
                   itemCount: _availableTimezones.length,
                   itemBuilder: (_, index) {
                     final info = _availableTimezones[index];
-                    return Text(
-                      '${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}',
-                    );
+                    return Text('${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}');
                   },
                 ),
               ),

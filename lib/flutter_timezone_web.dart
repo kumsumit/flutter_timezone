@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -11,7 +10,11 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 ///
 class FlutterTimezonePlugin {
   static void registerWith(Registrar registrar) {
-    final channel = MethodChannel('flutter_timezone', const StandardMethodCodec(), registrar);
+    final channel = MethodChannel(
+      'flutter_timezone',
+      const StandardMethodCodec(),
+      registrar,
+    );
     final instance = FlutterTimezonePlugin();
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
@@ -19,46 +22,37 @@ class FlutterTimezonePlugin {
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'getLocalTimezone':
-        return _getLocalTimeZoneInfo();
+        return _getLocalTimeZoneInfo(call.arguments);
       case 'getAvailableTimezones':
-        return _getAvailableTimezoneInfos();
+        return _getAvailableTimezoneInfos(call.arguments);
       default:
         throw PlatformException(
-            code: 'Unimplemented',
-            details: "The flutter_timezone plugin for web doesn't implement the method '${call.method}'");
+          code: 'Unimplemented',
+          details:
+              "The flutter_timezone plugin for web doesn't implement the method '{call.method}'",
+        );
     }
   }
 
   /// Platform-specific implementation of determining the user's
   /// local time zone when running on the web.
   ///
-  String _getLocalTimeZone() {
-    return _jsDateTimeFormat().resolvedOptions().timeZone;
+
+  Map<String, Object?> _getLocalTimeZoneInfo([dynamic localeArg]) {
+    final identifier = _jsDateTimeFormat().resolvedOptions().timeZone;
+    // Web does not support localizedName or locale, so return null for those fields
+    return {'identifier': identifier, 'localizedName': null, 'locale': null};
   }
 
-  Map<String, Object?> _getLocalTimeZoneInfo() {
-    return <String, Object?>{
-      'identifier': _getLocalTimeZone(),
-      'localizedName': null,
-      'locale': null,
-    };
-  }
-
-  List<Map<String, Object?>> _getAvailableTimezoneInfos() {
-    final intl = globalContext.getProperty<JSObject?>('Intl'.toJS);
-    if (intl == null || !intl.hasProperty('supportedValuesOf'.toJS).toDart) {
-      return <Map<String, Object?>>[_getLocalTimeZoneInfo()];
+  List<Map<String, Object?>> _getAvailableTimezoneInfos([dynamic localeArg]) {
+    final values = supportedValuesOf('timeZone'.toJS);
+    if (values == null) {
+      return [_getLocalTimeZoneInfo(localeArg)];
     }
-
-    final timezones = _supportedValuesOf('timeZone'.toJS);
-    if (timezones == null) {
-      return <Map<String, Object?>>[_getLocalTimeZoneInfo()];
-    }
-
-    return timezones.toDart
+    return values.toDart
         .map(
-          (timezone) => <String, Object?>{
-            'identifier': timezone.toDart,
+          (value) => {
+            'identifier': value.toDart,
             'localizedName': null,
             'locale': null,
           },
@@ -68,7 +62,7 @@ class FlutterTimezonePlugin {
 }
 
 @JS('Intl.supportedValuesOf')
-external JSArray<JSString>? _supportedValuesOf(JSString value);
+external JSArray<JSString>? supportedValuesOf(JSString value);
 
 @JS('Intl.DateTimeFormat')
 external _JSDateTimeFormat _jsDateTimeFormat();

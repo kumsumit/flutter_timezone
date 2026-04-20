@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   TimezoneInfo? _timezone;
-   List<TimezoneInfo> _availableTimezones = [];
+  List<TimezoneInfo> _availableTimezones = [];
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
-                 '${_timezone?.identifier ?? 'Unknown'} - ${_timezone?.localizedName?.name ?? 'Unknown'}',
+                '${_timezone?.identifier ?? 'Unknown'} - ${_timezone?.localizedName?.name ?? 'Unknown'}',
                 key: const ValueKey('timeZoneLabel'),
               ),
               const SizedBox(height: 12),
@@ -62,10 +62,9 @@ class _MyAppState extends State<MyApp> {
                   itemCount: _availableTimezones.length,
                   itemBuilder: (_, index) {
                     final info = _availableTimezones[index];
-                    return Text(
-                      '${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}',
-                    );
-                  },                ),
+                    return Text('${info.identifier} - ${info.localizedName?.name ?? 'Unknown'}');
+                  },
+                ),
               )
             ],
           ),
