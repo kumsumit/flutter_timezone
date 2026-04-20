@@ -9,7 +9,7 @@ const geonamesUrl = 'https://download.geonames.org/export/dump/timeZones.txt';
 const outputFile = 'lib/geonames_timezones.dart';
 
 Future<void> main() async {
-  print('Downloading $geonamesUrl ...');
+  // print('Downloading $geonamesUrl ...');
   final response = await HttpClient().getUrl(Uri.parse(geonamesUrl));
   final result = await response.close();
   if (result.statusCode != 200) {
@@ -48,5 +48,5 @@ Future<void> main() async {
   }
   buffer.writeln('];');
   await File(outputFile).writeAsString(buffer.toString());
-  print('Wrote timezone data to $outputFile');
+  // print('Wrote timezone data to $outputFile');
 }

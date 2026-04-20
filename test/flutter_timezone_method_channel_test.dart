@@ -5,14 +5,12 @@ import 'package:flutter_timezone/flutter_timezone_method_channel.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelFlutterTimezone platform = MethodChannelFlutterTimezone();
-  const MethodChannel channel = MethodChannel('flutter_timezone');
+  final platform = MethodChannelFlutterTimezone();
+  const channel = MethodChannel('flutter_timezone');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-          return '42';
-        });
+        .setMockMethodCallHandler(channel, (methodCall) async => '42');
   });
 
   tearDown(() {

@@ -11,26 +11,26 @@ void main() {
   test('web plugin uses real JS interop for timezone data', () async {
     final plugin = FlutterTimezonePlugin();
 
-    final local = await plugin.handleMethodCall(
-      const MethodCall('getLocalTimezone'),
-    );
+    final local =
+        await plugin.handleMethodCall(const MethodCall('getLocalTimezone'))
+            as Map<String, Object?>;
     expect(local, isA<Map<String, Object?>>());
-    expect((local['identifier'] as String).isNotEmpty, isTrue);
+    final identifier = local['identifier'];
+    expect(identifier is String && identifier.isNotEmpty, isTrue);
     expect(local['localizedName'], isNull);
     expect(local['locale'], isNull);
 
-    final available = await plugin.handleMethodCall(
-      const MethodCall('getAvailableTimezones'),
-    );
+    final available =
+        await plugin.handleMethodCall(const MethodCall('getAvailableTimezones'))
+            as List<Map<String, Object?>>;
     expect(available, isA<List<Map<String, Object?>>>());
-    final list = available as List<Map<String, Object?>>;
+    final list = available;
     expect(list.isNotEmpty, isTrue);
     expect(
-      list.every(
-        (value) =>
-            value['identifier'] != null &&
-            (value['identifier'] as String).isNotEmpty,
-      ),
+      list.every((value) {
+        final id = value['identifier'];
+        return id is String && id.isNotEmpty;
+      }),
       isTrue,
     );
 

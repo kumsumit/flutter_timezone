@@ -73,10 +73,10 @@ class _MyAppState extends State<MyApp> {
               ),
               const SizedBox(height: 16),
               Text('All timezones for country ($_exampleCountry):'),
-              ..._timezonesForCountry.map((tz) => Text(tz)).toList(),
+              ..._timezonesForCountry.map(Text.new),
               const SizedBox(height: 16),
               Text('Countries for GMT offset ($_exampleOffset):'),
-              ..._countriesForOffset.map((cc) => Text(cc)).toList(),
+              ..._countriesForOffset.map(Text.new),
               const SizedBox(height: 16),
               Text(
                 'Available Time Zones (${_availableTimezones.length})',

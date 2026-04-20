@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import 'flutter_timezone_platform_interface.dart';
+import 'package:flutter_timezone/flutter_timezone_platform_interface.dart';
 
 /// An implementation of [FlutterTimezonePlatform] that uses method channels.
 class MethodChannelFlutterTimezone extends FlutterTimezonePlatform {
