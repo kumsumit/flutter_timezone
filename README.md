@@ -2,7 +2,20 @@
 
 A flutter plugin for getting the local timezone of the OS.
 
+
 This is a fork of the original [flutter_native_timezone](https://pub.dev/packages/flutter_native_timezone) due to lack of maintenance of that package.
+
+## Timezone Data Source
+
+This project uses the authoritative [GeoNames timeZones.txt](https://download.geonames.org/export/dump/timeZones.txt) as the source for timezone information, which is more reliable and up-to-date than Wikipedia.
+
+To update the timezone data, run:
+
+```sh
+dart tool/fetch_geonames_timezones.dart
+```
+
+This will download and parse the latest GeoNames timezone data and generate a Dart file in `lib/geonames_timezones.dart`.
 
 ## Getting Started
 
@@ -17,11 +30,18 @@ final TimezoneInfo currentTimeZone = await FlutterTimezone.getLocalTimezone();
 
 ### Localized timezone names
 
-On supported platforms Timezone info will contain the localized timezone name. Currently, this is supported on:
+
+On supported platforms, Timezone info will contain the localized timezone name. Currently, this is supported on:
  - Android
  - MacOS
  - iOS
+ - Linux
+ - Windows
+
+**Web platform note:**
+On web, the plugin always returns only the timezone identifier. The `localizedName` and `locale` fields are always `null` because browser APIs do not provide this information.
 
 ## Reference
 
-[Wikipedia's list of TZ database names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+- [GeoNames timeZones.txt](https://download.geonames.org/export/dump/timeZones.txt)
+- [Wikipedia's list of TZ database names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)

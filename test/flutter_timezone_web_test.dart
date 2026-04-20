@@ -11,17 +11,28 @@ void main() {
   test('web plugin uses real JS interop for timezone data', () async {
     final plugin = FlutterTimezonePlugin();
 
-    final local =
-        await plugin.handleMethodCall(const MethodCall('getLocalTimezone'));
-    expect(local, isA<String>());
-    expect((local as String).isNotEmpty, isTrue);
+    final local = await plugin.handleMethodCall(
+      const MethodCall('getLocalTimezone'),
+    );
+    expect(local, isA<Map<String, Object?>>());
+    expect((local['identifier'] as String).isNotEmpty, isTrue);
+    expect(local['localizedName'], isNull);
+    expect(local['locale'], isNull);
 
-    final available = await plugin
-        .handleMethodCall(const MethodCall('getAvailableTimezones'));
-    expect(available, isA<List<String>>());
-    final list = available as List<String>;
+    final available = await plugin.handleMethodCall(
+      const MethodCall('getAvailableTimezones'),
+    );
+    expect(available, isA<List<Map<String, Object?>>>());
+    final list = available as List<Map<String, Object?>>;
     expect(list.isNotEmpty, isTrue);
-    expect(list.every((value) => value.isNotEmpty), isTrue);
+    expect(
+      list.every(
+        (value) =>
+            value['identifier'] != null &&
+            (value['identifier'] as String).isNotEmpty,
+      ),
+      isTrue,
+    );
 
     const stableSample = <String>[
       'Africa/Abidjan',
@@ -38,7 +49,7 @@ void main() {
       'Europe/Paris',
     ];
     for (final zone in stableSample) {
-      expect(list, contains(zone));
+      expect(list.map((m) => m['identifier']), contains(zone));
     }
   });
 }

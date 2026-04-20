@@ -8,28 +8,6 @@ public class FlutterTimezonePlugin: NSObject, FlutterPlugin {
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
     
-  func getPreferredLocale() -> Locale {
-    guard let preferredIdentifier = Locale.preferredLanguages.first else {
-      return Locale.current
-    }
-    return Locale(identifier: preferredIdentifier)
-  }
-
-  func getLocaleIdentifier(_ locale: Locale) -> String {
-    if #available(macOS 13, *) {
-        return locale.identifier(.icu)
-    } else {
-      return locale.identifier
-    }
-  }
-
-  func isValidLocale(_ locale: Locale) -> Bool {
-    if #available(macOS 13, *) {
-      return locale.language.languageCode != nil
-    } else {
-      return locale.languageCode != nil
-    }
-  }
 
   func getPreferredLocale() -> Locale {
     guard let preferredIdentifier = Locale.preferredLanguages.first else {
