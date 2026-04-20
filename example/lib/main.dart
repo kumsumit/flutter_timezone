@@ -16,8 +16,8 @@ class _MyAppState extends State<MyApp> {
   String? _countryForCurrentTz;
   List<String> _timezonesForCountry = [];
   List<String> _countriesForOffset = [];
-  final String _exampleCountry = 'IN';
-  final String _exampleOffset = '5.5';
+ final String _exampleCountry = 'IN';
+  String _currentOffset = '5.5';
   TimezoneInfo? _timezone;
   List<TimezoneInfo> _availableTimezones = [];
 
@@ -31,17 +31,20 @@ class _MyAppState extends State<MyApp> {
     _timezone = await FlutterTimezone.getLocalTimezone();
     _availableTimezones = await FlutterTimezone.getAvailableTimezones();
     _availableTimezones.sort((a, b) => a.identifier.compareTo(b.identifier));
+    final now = DateTime.now();
+    _currentOffset = (now.timeZoneOffset.inMinutes / 60).toString();
 
+    // _currentOffset = _timezone?.currentOffset.toString() ?? 'Unknown';
     // Example: get country for current timezone
     _countryForCurrentTz = _timezone != null
         ? getCountryCodeForTimezone(_timezone!.identifier)
         : null;
 
     // Example: get all timezones for a country (e.g., 'IN')
-    _timezonesForCountry = getTimezonesForCountry(_exampleCountry);
+    _timezonesForCountry = getTimezonesForCountry(_countryForCurrentTz ?? _exampleCountry);
 
     // Example: get all countries for a GMT offset (e.g., '5.5')
-    _countriesForOffset = getCountriesForOffset(_exampleOffset);
+    _countriesForOffset = getCountriesForOffset(_currentOffset);
 
     if (mounted) {
       setState(() {});
@@ -72,10 +75,10 @@ class _MyAppState extends State<MyApp> {
                 'Country for local timezone: ${_countryForCurrentTz ?? "..."}',
               ),
               const SizedBox(height: 16),
-              Text('All timezones for country ($_exampleCountry):'),
+              Text('All timezones for country (${_countryForCurrentTz ?? _exampleCountry}):'),
               ..._timezonesForCountry.map(Text.new),
               const SizedBox(height: 16),
-              Text('Countries for GMT offset ($_exampleOffset):'),
+              Text('Countries for GMT offset ($_currentOffset):'),
               ..._countriesForOffset.map(Text.new),
               const SizedBox(height: 16),
               Text(

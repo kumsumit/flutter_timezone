@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_timezone/flutter_timezone_platform_interface.dart';
 import 'package:flutter_timezone/geonames_timezones.dart';
 import 'package:flutter_timezone/timezone_info.dart';
 
@@ -55,10 +54,6 @@ Map<String, String>? getTimezoneInfo(String id) {
 /// Class for getting the native timezone.
 ///
 class FlutterTimezone {
-  /// Returns the platform version string from the native layer.
-  static Future<String?> getPlatformVersion() {
-    return FlutterTimezonePlatform.instance.getPlatformVersion();
-  }
 
   static const MethodChannel _channel = MethodChannel('flutter_timezone');
 
