@@ -1,43 +1,33 @@
-group = "net.wolverinebeach.flutter_timezone"
-version = "1.0-SNAPSHOT"
-
-buildscript {
-    val kotlinVersion = "2.2.20"
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.11.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android") version "2.3.21"
 }
+
+group = "net.wolverinebeach.flutter_timezone"
+version = "1.0-SNAPSHOT"
+
+repositories {
+        google()
+        mavenCentral()
+    }
+
 
 android {
     namespace = "net.wolverinebeach.flutter_timezone"
 
-    compileSdk = 36
+    compileSdk = 37
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
     }
 
     sourceSets {
@@ -51,6 +41,7 @@ android {
 
     defaultConfig {
         minSdk = 24
+        targetSdk = 37
     }
 
     testOptions {
@@ -72,5 +63,5 @@ android {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.mockito:mockito-core:5.0.0")
+    testImplementation("org.mockito:mockito-core:5.23.0")
 }

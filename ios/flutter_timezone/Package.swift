@@ -18,9 +18,6 @@ let package = Package(
             dependencies: [],
             resources: [
                 .process("PrivacyInfo.xcprivacy")
-            ],
-            cSettings: [
-                .headerSearchPath("include/flutter_timezone"),
             ]
         )
     ]

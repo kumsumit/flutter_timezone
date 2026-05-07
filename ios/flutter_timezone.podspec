@@ -12,9 +12,10 @@ Get the local timezone and available timezone identifiers from iOS.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Thomas Järvstrand' => 'tjarvstrand@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'flutter_timezone/Sources/flutter_timezone/**/*.{h,m}'
-  s.public_header_files = 'flutter_timezone/Sources/flutter_timezone/include/**/*.h'
+  s.source_files = 'flutter_timezone/Sources/flutter_timezone/**/*.swift'
   s.resource_bundles = {'flutter_timezone_privacy' => ['flutter_timezone/Sources/flutter_timezone/PrivacyInfo.xcprivacy']}
   s.dependency 'Flutter'
   s.ios.deployment_target = '11.0'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.swift_version = '5.0'
 end
