@@ -25,19 +25,15 @@ extensions.configure<com.android.build.api.dsl.LibraryExtension>("android") {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    sourceSets {
-        named("main") {
-            kotlin.directories.add(
-                project.layout.projectDirectory.dir("src/main/kotlin")
-            )
-        }
-
-        named("test") {
-            kotlin.directories.add(
-                project.layout.projectDirectory.dir("src/test/kotlin")
-            )
-        }
+   sourceSets {
+    named("main") {
+        kotlin.directories.add("src/main/kotlin")
     }
+
+    named("test") {
+        kotlin.directories.add("src/test/kotlin")
+    }
+}
 
     testOptions {
         unitTests.all {
