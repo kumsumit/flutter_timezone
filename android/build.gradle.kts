@@ -1,6 +1,5 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
 }
 
 group = "net.wolverinebeach.flutter_timezone"
