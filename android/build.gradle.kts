@@ -10,14 +10,14 @@ repositories {
     mavenCentral()
 }
 
-android {
+extensions.configure<com.android.build.api.dsl.LibraryExtension>("android") {
+
     namespace = "net.wolverinebeach.flutter_timezone"
 
     compileSdk = 37
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 37
     }
 
     compileOptions {
@@ -27,34 +27,35 @@ android {
 
     sourceSets {
         named("main") {
-            kotlin.srcDir("src/main/kotlin")
+            kotlin.directories.add(
+                project.layout.projectDirectory.dir("src/main/kotlin")
+            )
         }
 
         named("test") {
-            kotlin.srcDir("src/test/kotlin")
+            kotlin.directories.add(
+                project.layout.projectDirectory.dir("src/test/kotlin")
+            )
         }
     }
 
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
+        unitTests.all {
 
-            all {
-                useJUnitPlatform()
+            it.useJUnitPlatform()
 
-                outputs.upToDateWhen { false }
+            it.outputs.upToDateWhen { false }
 
-                testLogging {
-                    events(
-                        "passed",
-                        "skipped",
-                        "failed",
-                        "standardOut",
-                        "standardError"
-                    )
+            it.testLogging {
+                events(
+                    "passed",
+                    "skipped",
+                    "failed",
+                    "standardOut",
+                    "standardError"
+                )
 
-                    showStandardStreams = true
-                }
+                showStandardStreams = true
             }
         }
     }
