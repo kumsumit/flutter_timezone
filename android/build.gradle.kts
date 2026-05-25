@@ -1,20 +1,25 @@
 plugins {
     id("com.android.library")
+    kotlin("android")
 }
 
 group = "net.wolverinebeach.flutter_timezone"
 version = "1.0-SNAPSHOT"
 
 repositories {
-        google()
-        mavenCentral()
-    }
-
+    google()
+    mavenCentral()
+}
 
 android {
     namespace = "net.wolverinebeach.flutter_timezone"
 
     compileSdk = 37
+
+    defaultConfig {
+        minSdk = 24
+        targetSdk = 37
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -22,29 +27,33 @@ android {
     }
 
     sourceSets {
-        getByName("main") {
-            kotlin.srcDirs("src/main/kotlin")
+        named("main") {
+            kotlin.srcDir("src/main/kotlin")
         }
-        getByName("test") {
-            kotlin.srcDirs("src/test/kotlin")
-        }
-    }
 
-    defaultConfig {
-        minSdk = 24
-        targetSdk = 37
+        named("test") {
+            kotlin.srcDir("src/test/kotlin")
+        }
     }
 
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+
             all {
-                it.useJUnitPlatform()
+                useJUnitPlatform()
 
-                it.outputs.upToDateWhen { false }
+                outputs.upToDateWhen { false }
 
-                it.testLogging {
-                    events("passed", "skipped", "failed", "standardOut", "standardError")
+                testLogging {
+                    events(
+                        "passed",
+                        "skipped",
+                        "failed",
+                        "standardOut",
+                        "standardError"
+                    )
+
                     showStandardStreams = true
                 }
             }
@@ -54,11 +63,13 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+        jvmTarget.set(
+            org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+        )
     }
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation(kotlin("test"))
     testImplementation("org.mockito:mockito-core:5.23.0")
 }
