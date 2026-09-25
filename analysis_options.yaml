@@ -24,7 +24,6 @@ linter:
     - avoid_js_rounded_ints
     - avoid_multiple_declarations_per_line
     - avoid_positional_boolean_parameters: false
-    - avoid_private_typedef_functions
     - avoid_redundant_argument_values: false
     - avoid_returning_null: false # deprecated
     - avoid_returning_this
@@ -69,7 +68,6 @@ linter:
     - no_wildcard_variable_uses
     - noop_primitive_operations
     - omit_local_variable_types
-    - one_member_abstracts
     - only_throw_errors
     - package_api_docs: false
     - parameter_assignments
@@ -101,7 +99,6 @@ linter:
 #    - type_annotate_public_apis
     - type_literal_in_constant_pattern
     - unawaited_futures
-    - unnecessary_await_in_return
     - unnecessary_breaks
     - unnecessary_final: false
     - unnecessary_lambdas

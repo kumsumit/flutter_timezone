@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class TimezoneInfo with EquatableMixin {
+class TimezoneInfo with Equatable {
   TimezoneInfo({required this.identifier, this.localizedName});
 
   factory TimezoneInfo.fromJson(Map json) {
